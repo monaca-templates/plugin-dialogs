@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta http-equiv="Content-Security-Policy" content="default-src * data: gap: content: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+	<script src="components/loader.js"></script>
+	<link rel="stylesheet" href="components/loader.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script>
+		function showAlert() {
+			navigator.notification.alert(
+				'This is an alert!',	// message
+				function() {			// called when the alert is closed
+					var alertsCountEl = document.querySelector('.alert-close-count');
+					alertsCountEl.innerText = parseInt(alertsCountEl.innerText) + 1;
+				},		 
+				'Monaca Alert',		 	// title
+				'Thanks!'				// button text
+			);
+		}
+
+		function showConfirm() {
+			navigator.notification.confirm(
+				'Rock, paper or scissors?',		// message
+				function(buttonIndex) {			// called when the prompt is closed
+					// buttonIndex lets us know which button was pressed. 0 means no button
+					// was pressed, and the prompt was dismissed another way, such as using
+					// the back button. The actual button ids start from 1, and correspond
+					// to the array below - ['Rock', 'Paper', 'Scissors'].
+					var countEl = document.querySelector('.confirm-option-' + buttonIndex + '-count');
+					countEl.innerText = parseInt(countEl.innerText, 10) + 1;
+				},
+				'Choose an option',				// title
+				['Rock', 'Paper', 'Scissors']	// button labels
+			);
+		}
+
+		function showPrompt() {
+			navigator.notification.prompt(
+				'Hello, what is your name?', // message
+				function(result) { // called when the prompt is closed
+					// Only change the name if the user pressed the "Set name" button
+					if(result.buttonIndex === 1) {
+						document.querySelector('.name').innerText = result.input1 + "'s";
+					}
+				},
+				'Enter name',				// title
+				['Set name', 'No thanks'],	// button labels
+				''							// pre-fill the input with this text
+			);
+		}
+
+		function doBeep(times) {
+			navigator.notification.beep(times);
+		}
+	</script>
+</head>
+<body>
+	<h2><span class="name"></span> Dialogs Plugin Demo</h2>
+	<p>Alerts closed: <span class="alert-close-count">0</span></p>
+	<p>Confirm count: 
+		Rock <span class="confirm-option-1-count">0</span>,
+		Paper <span class="confirm-option-2-count">0</span>,
+		Scissors <span class="confirm-option-3-count">0</span>,
+		None <span class="confirm-option-0-count">0</span>
+	</p>
+	<button onclick="showAlert()">Show alert dialog</button>
+	<button onclick="showConfirm()">Show confirm dialog</button>
+	<button onclick="showPrompt()">Show prompt dialog</button>
+	<button onclick="doBeep(1)">Beep once</button>
+	<button onclick="doBeep(2)">Beep twice</button>
+	<p>Ensure the device is not in silent mode or you may not hear the beeps.</p>
+</body>
+</html>
